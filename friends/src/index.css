@@ -8,3 +8,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.nav{
+  text-align: center;
+  margin-bottom: 20px;
+}
+.nav a{
+  color: black;
+  margin: 10px;
+  text-decoration: none;
+  padding: 5px;
+  font-size: 24px;
+  
+}
+
+nav .active{
+  text-decoration: underline;
+
+}

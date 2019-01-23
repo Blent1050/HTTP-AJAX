@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route, NavLink } from 'react-router-dom';
 import FriendContainer from './components/FriendContainer';
 import AddFriend from './components/AddFriend';
 import axios from 'axios';
@@ -21,9 +21,9 @@ class App extends Component {
 	render() {
 		return (
 			<div className="App">
-				<nav>
-					<Link to="/">Home</Link>
-					<Link to="/add">Add Friends</Link>
+				<nav className='nav'>
+					<NavLink to="/">Home</NavLink>
+					<NavLink to="/add">Add Friends</NavLink>
 				</nav>
 				<Route exact path='/' render={props => <FriendContainer {...props} friends={this.state.friends}/>}/>
 				<Route path='/add' component={AddFriend}/>
@@ -33,3 +33,5 @@ class App extends Component {
 }
 
 export default App;
+
+
