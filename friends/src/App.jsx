@@ -20,12 +20,7 @@ class App extends Component {
     <div className="App">
       {this.state.friends.map(friend => {
         return(
-          <div id={friend.id}>
-            <h2>{friend.name}</h2>
-            <p>Age: {friend.age}</p>
-            <p>Email: {friend.email}</p>
-            
-          </div>
+          <Friend key={friend.id} friend={friend}/>
         )
       })}
     </div>
