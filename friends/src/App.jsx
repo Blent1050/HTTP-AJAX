@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
-import { Route, NavLink } from 'react-router-dom';
+import { Route, NavLink,  } from 'react-router-dom';
 import FriendContainer from './components/FriendContainer';
 import AddFriend from './components/AddFriend';
 import axios from 'axios';
 
-
+const clearedItem = {
+	name: '',
+	age: '',
+	email: '',
+}
 class App extends Component {
 	state = {
 		friends: [],
-		name: '',
-		age: 0,
-		email: '',
-		error: ''
+		friend: clearedItem,
+		error: '',
+		isUpdating: false
 	};
 
 	componentDidMount() {
@@ -21,58 +24,104 @@ class App extends Component {
 			.catch((err) => this.setState({ error: 'Error' }));
 	}
 
-	handleChanges = event => {
-		this.setState({ 
-			[event.target.name]: event.target.value });
-	  };
-
-	  postMessage = (e) => {
+	handleChanges = (event) => {
+		event.persist();
+		this.setState(prevState => {
+			return{
+				friend: {
+					...prevState.friend,
+					[event.target.name]: event.target.value
+				}
+			}
+		});
+	};
+	//Create
+	postMessage = (e) => {
 		e.preventDefault();
-        axios
-          .post(`http://localhost:5000/friends`, { 
-			  name:this.state.name,
-			  age:this.state.age,
-			  email:this.state.email
-		  })
-          .then(res =>{
-			this.setState({
-				friends: res.data,
-				name: '',
-				age: '',
-				email:''
+		axios
+			.post(`http://localhost:5000/friends`, this.state.friend)
+			.then((res) => {
+				this.setState({
+					friends: res.data,
+					item: clearedItem
+				});
+				this.props.history.push('/');
 			})
-		  })
-          .catch(err => console.log(err));
+			.catch((err) => console.log(err));
 	};
 
-	  deleteItem = (e, itemId) => {
+	//Update
+	populateForm = (e, id) => {
+	e.preventDefault();
+	this.setState({
+		friend: this.state.friends.find(friend => friend.id === id),
+		isUpdating: true
+	})
+	this.props.history.push('/add')
+	}	
+	updateItem = () => {
+		axios
+		.put(`http://localhost:5000/${this.state.friends.id}`,this.state.friend)
+		.then(res => {
+			this.setState({
+				friends: res.data,
+				isUpdating: false,
+				friend: clearedItem
+			})
+		})
+		.catch(err => console.log(err))
+	}
+
+	deleteItem = (e, itemId) => {
 		e.preventDefault();
 		console.log(itemId);
 		axios
-		  .delete(`http://localhost:5000/friends/${itemId}`)
-		  .then(res => {
-			this.setState({ friends: res.data });
-			// this.props.history.push("/friends");
-		  })
-		  .catch(err => {
-			console.log(err);
-		  });
-	  };
+			.delete(`http://localhost:5000/friends/${itemId}`)
+			.then((res) => {
+				this.setState({ friends: res.data });
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	render() {
 		return (
 			<div className="App">
-				<nav className='nav'>
-					<NavLink exact to="/">Home</NavLink>
+				<nav className="nav">
+					<NavLink exact to="/">
+						Home
+					</NavLink>
 					<NavLink to="/add">Add Friends</NavLink>
 				</nav>
-				<Route exact path='/' render={props => <FriendContainer {...props} deleteItem={this.deleteItem} friends={this.state.friends}/>}/>
-				<Route path='/add' render={ props => <AddFriend {...props} friend={this.state} handleChanges={this.handleChanges} postMessage={this.postMessage} />}/>
+				<Route
+					exact
+					path="/"
+					render={(props) => (
+						<FriendContainer
+							{...props}
+							
+							deleteItem={this.deleteItem}
+							friends={this.state.friends}
+						/>
+					)}
+				/>
+				<Route
+					path="/add"
+					render={(props) => (
+						<AddFriend
+							{...props}
+							updateItem={this.updateItem}
+							isUpdating={this.state.isUpdating}
+							friend={this.state}
+							handleChanges={this.handleChanges}
+							postMessage={this.postMessage}
+						/>
+					)}
+				/>
 			</div>
 		);
 	}
 }
 
 export default App;
-
-

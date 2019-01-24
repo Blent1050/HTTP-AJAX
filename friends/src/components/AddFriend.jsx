@@ -4,8 +4,17 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 
+
 const AddFriend = props => {
 	const {friends, friend, error} = props;
+	function handleSubmit(e){
+		e.preventDefault();
+		if(props.isUpdating){
+			props.updateItem();
+		}else{
+			props.addItem();
+		}
+	}
 	return (
 		<AddFriendContainer>
 			<h1>Add a friend!</h1>
@@ -31,11 +40,12 @@ const AddFriendContainer = styled.div`
 `;
 
 function Inputs(props) {
+	console.log(props)
 	return (
 		<>
 			<Input
 				placeholder="Name"
-				value={props.friend.name}
+				value={props.friend.friend.name}
 				onChange={props.handleChanges}
 				name='name'
 				inputProps={{
@@ -46,7 +56,7 @@ function Inputs(props) {
 			<br />
 			<Input
 				placeholder="Age"
-				value={props.friend.age}
+				value={props.friend.friend.age}
 				name='age'
 				onChange={props.handleChanges}
 				inputProps={{
@@ -57,7 +67,7 @@ function Inputs(props) {
 			/>
 			<br />
 			<Input
-				value={props.friend.email}
+				value={props.friend.friend.email}
 				placeholder="Email"
 				name='email'
 				onChange={props.handleChanges}

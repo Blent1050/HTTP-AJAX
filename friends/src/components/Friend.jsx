@@ -1,16 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 
 const Friend = (props) => {
 	return (
 		<FriendContainer>
-			<FriendName>{props.friend.name}</FriendName>
+			<FriendName />
+			<h2>{props.friend.name}</h2>
 			<p>Age: {props.friend.age}</p>
 			<p>Email: {props.friend.email}</p>
-			<Button variant="contained" color="primary">
-				Update
-			</Button>
+			<Link to={`${props.friend.id}`}>
+				<Button variant="contained" color="primary">
+					Update
+				</Button>
+			</Link>
 			<Button onClick={(e) => props.deleteItem(e, props.friend.id)} variant="contained" color="secondary">
 				Delete
 			</Button>
