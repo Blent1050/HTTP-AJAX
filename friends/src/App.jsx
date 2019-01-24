@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, NavLink,  } from 'react-router-dom';
+import { Route, NavLink } from 'react-router-dom';
 import FriendContainer from './components/FriendContainer';
 import AddFriend from './components/AddFriend';
 import axios from 'axios';
@@ -7,8 +7,8 @@ import axios from 'axios';
 const clearedItem = {
 	name: '',
 	age: '',
-	email: '',
-}
+	email: ''
+};
 class App extends Component {
 	state = {
 		friends: [],
@@ -26,24 +26,23 @@ class App extends Component {
 
 	handleChanges = (event) => {
 		event.persist();
-		this.setState(prevState => {
-			return{
+		this.setState((prevState) => {
+			return {
 				friend: {
 					...prevState.friend,
 					[event.target.name]: event.target.value
 				}
-			}
+			};
 		});
 	};
 	//Create
-	postMessage = (e) => {
-		e.preventDefault();
+	addItem = () => {
 		axios
 			.post(`http://localhost:5000/friends`, this.state.friend)
 			.then((res) => {
 				this.setState({
 					friends: res.data,
-					item: clearedItem
+					friend: clearedItem
 				});
 				this.props.history.push('/');
 			})
@@ -52,25 +51,26 @@ class App extends Component {
 
 	//Update
 	populateForm = (e, id) => {
-	e.preventDefault();
-	this.setState({
-		friend: this.state.friends.find(friend => friend.id === id),
-		isUpdating: true
-	})
-	this.props.history.push('/add')
-	}	
+		e.preventDefault();
+		this.setState({
+			friend: this.state.friends.find((friend) => friend.id === id),
+			isUpdating: true
+		});
+		this.props.history.push('/add');
+	};
 	updateItem = () => {
 		axios
-		.put(`http://localhost:5000/${this.state.friends.id}`,this.state.friend)
-		.then(res => {
-			this.setState({
-				friends: res.data,
-				isUpdating: false,
-				friend: clearedItem
+			.put(`http://localhost:5000/friends/${this.state.friend.id}`, this.state.friend)
+			.then((res) => {
+				this.setState({
+					friends: res.data,
+					isUpdating: false,
+					friend: clearedItem
+				});
+				this.props.history.push('/')
 			})
-		})
-		.catch(err => console.log(err))
-	}
+			.catch((err) => console.log(err));
+	};
 
 	deleteItem = (e, itemId) => {
 		e.preventDefault();
@@ -86,6 +86,7 @@ class App extends Component {
 	};
 
 	render() {
+		console.log(this.state.friends)
 		return (
 			<div className="App">
 				<nav className="nav">
@@ -99,8 +100,8 @@ class App extends Component {
 					path="/"
 					render={(props) => (
 						<FriendContainer
+							populateForm={this.populateForm}
 							{...props}
-							
 							deleteItem={this.deleteItem}
 							friends={this.state.friends}
 						/>
@@ -115,7 +116,7 @@ class App extends Component {
 							isUpdating={this.state.isUpdating}
 							friend={this.state}
 							handleChanges={this.handleChanges}
-							postMessage={this.postMessage}
+							addItem={this.addItem}
 						/>
 					)}
 				/>

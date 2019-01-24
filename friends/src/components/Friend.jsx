@@ -10,11 +10,11 @@ const Friend = (props) => {
 			<h2>{props.friend.name}</h2>
 			<p>Age: {props.friend.age}</p>
 			<p>Email: {props.friend.email}</p>
-			<Link to={`${props.friend.id}`}>
-				<Button variant="contained" color="primary">
+			<div>
+				<Button onClick={e => props.populateForm(e, props.friend.id)} variant="contained" color="primary">
 					Update
 				</Button>
-			</Link>
+			</div>
 			<Button onClick={(e) => props.deleteItem(e, props.friend.id)} variant="contained" color="secondary">
 				Delete
 			</Button>

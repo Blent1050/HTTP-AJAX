@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 
 const AddFriend = props => {
 	const {friends, friend, error} = props;
+
 	function handleSubmit(e){
 		e.preventDefault();
 		if(props.isUpdating){
@@ -19,7 +20,7 @@ const AddFriend = props => {
 		<AddFriendContainer>
 			<h1>Add a friend!</h1>
 			<FormGroup>
-			<form onSubmit={props.postMessage}>
+			<form onSubmit={handleSubmit}>
 				<Inputs friend={friend} addItem={props.addItem} handleChanges={props.handleChanges}/>
 			</form>
 			</FormGroup>
