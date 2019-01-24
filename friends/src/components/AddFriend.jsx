@@ -11,7 +11,7 @@ const AddFriend = props => {
 			<h1>Add a friend!</h1>
 			<FormGroup>
 			<form onSubmit={props.postMessage}>
-				<Inputs friend={friend} handleChanges={props.handleChanges}/>
+				<Inputs friend={friend} addItem={props.addItem} handleChanges={props.handleChanges}/>
 			</form>
 			</FormGroup>
 		</AddFriendContainer>
@@ -31,7 +31,6 @@ const AddFriendContainer = styled.div`
 `;
 
 function Inputs(props) {
-	console.log(props)
 	return (
 		<>
 			<Input
@@ -42,7 +41,7 @@ function Inputs(props) {
 				inputProps={{
 					'aria-label': 'Description'
 				}}
-				
+				required
 			/>{' '}
 			<br />
 			<Input
@@ -54,6 +53,7 @@ function Inputs(props) {
 					'aria-label': 'Description'
 				}}
 				type="number"
+				required
 			/>
 			<br />
 			<Input
@@ -65,6 +65,7 @@ function Inputs(props) {
 					'aria-label': 'Description'
 				}}
 				type="email"
+				required
 			/>
 			<br /> <br />
 			<Button type='submit' variant="contained" color="primary">

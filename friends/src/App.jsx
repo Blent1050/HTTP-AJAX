@@ -21,7 +21,12 @@ class App extends Component {
 			.catch((err) => this.setState({ error: 'Error' }));
 	}
 
-	postMessage = (e) => {
+	handleChanges = event => {
+		this.setState({ 
+			[event.target.name]: event.target.value });
+	  };
+
+	  postMessage = (e) => {
 		e.preventDefault();
         axios
           .post(`http://localhost:5000/friends`, { 
@@ -40,20 +45,28 @@ class App extends Component {
           .catch(err => console.log(err));
 	};
 
-	handleChanges = event => {
-		this.setState({ 
-			[event.target.name]: event.target.value });
+	  deleteItem = (e, itemId) => {
+		e.preventDefault();
+		console.log(itemId);
+		axios
+		  .delete(`http://localhost:5000/friends/${itemId}`)
+		  .then(res => {
+			this.setState({ friends: res.data });
+			// this.props.history.push("/friends");
+		  })
+		  .catch(err => {
+			console.log(err);
+		  });
 	  };
 
 	render() {
-		console.log(this.state.friends)
 		return (
 			<div className="App">
 				<nav className='nav'>
 					<NavLink exact to="/">Home</NavLink>
 					<NavLink to="/add">Add Friends</NavLink>
 				</nav>
-				<Route exact path='/' render={props => <FriendContainer {...props} friends={this.state.friends}/>}/>
+				<Route exact path='/' render={props => <FriendContainer {...props} deleteItem={this.deleteItem} friends={this.state.friends}/>}/>
 				<Route path='/add' render={ props => <AddFriend {...props} friend={this.state} handleChanges={this.handleChanges} postMessage={this.postMessage} />}/>
 			</div>
 		);
