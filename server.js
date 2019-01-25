@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
+const path = require('path');
 const app = express();
 let nextId = 7;
 
@@ -80,6 +80,17 @@ app.delete('/friends/:id', (req, res) => {
 	res.status(200).json(friends);
 });
 
-app.listen(5000, () => {
+// Serve static assets if in production
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static('friends/build'));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'friends', 'build', 'index.html'));
+  });
+}
+
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => {
   console.log('server listening on port 5000');
 });
