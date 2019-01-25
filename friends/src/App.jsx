@@ -19,7 +19,7 @@ class App extends Component {
 
 	componentDidMount() {
 		axios
-			.get('http://localhost:5000/friends')
+			.get('/friends')
 			.then((res) => this.setState({ friends: res.data, error: '' }))
 			.catch((err) => this.setState({ error: 'Error' }));
 	}
@@ -38,7 +38,7 @@ class App extends Component {
 	//Create
 	addItem = () => {
 		axios
-			.post(`http://localhost:5000/friends`, this.state.friend)
+			.post(`/friends`, this.state.friend)
 			.then((res) => {
 				this.setState({
 					friends: res.data,
@@ -60,7 +60,7 @@ class App extends Component {
 	};
 	updateItem = () => {
 		axios
-			.put(`http://localhost:5000/friends/${this.state.friend.id}`, this.state.friend)
+			.put(`/friends/${this.state.friend.id}`, this.state.friend)
 			.then((res) => {
 				this.setState({
 					friends: res.data,
@@ -76,7 +76,7 @@ class App extends Component {
 		e.preventDefault();
 		console.log(itemId);
 		axios
-			.delete(`http://localhost:5000/friends/${itemId}`)
+			.delete(`/friends/${itemId}`)
 			.then((res) => {
 				this.setState({ friends: res.data });
 			})
